@@ -1,5 +1,6 @@
 README.md
 pyproject.toml
+setup.cfg
 src/rhel_ai_toolkit/__init__.py
 src/rhel_ai_toolkit/cli.py
 src/rhel_ai_toolkit.egg-info/PKG-INFO
@@ -8,3 +9,4 @@ src/rhel_ai_toolkit.egg-info/dependency_links.txt
 src/rhel_ai_toolkit.egg-info/entry_points.txt
 src/rhel_ai_toolkit.egg-info/requires.txt
 src/rhel_ai_toolkit.egg-info/top_level.txt
+tests/test_basic.py
