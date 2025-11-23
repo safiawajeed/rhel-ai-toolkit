@@ -1,0 +1,86 @@
+name: RHEL AI Toolkit CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install flake8 click
+
+      - name: Lint code
+        run: flake8 src/
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install test dependencies
+        run: |
+          pip install pytest click
+
+      - name: Run tests
+        run: pytest -q
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install build tools
+        run: |
+          pip install build click
+
+      - name: Build wheel
+        run: python -m build
+
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheel-artifacts
+          path: dist/*.whl
+
+  container:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build container image
+        run: docker build -t rhel-ai-toolkit:latest .
+
+      - name: Save Docker image as tar
+        run: docker save rhel-ai-toolkit:latest -o image.tar
+
+      - name: Upload container artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: container-image
+          path: image.tar
