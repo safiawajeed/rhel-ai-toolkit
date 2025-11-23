@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: rhel-ai-toolkit
+Version: 0.0.0
+Summary:  A small Python CLI toolkit for system introspection
+Author: Safia Wajeed
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: click

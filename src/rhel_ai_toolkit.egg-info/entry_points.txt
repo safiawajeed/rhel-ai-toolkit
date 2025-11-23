@@ -1,0 +1,2 @@
+[console_scripts]
+rhel-ai = rhel_ai_toolkit.cli:cli
